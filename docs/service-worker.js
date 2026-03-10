@@ -1,14 +1,14 @@
 // const CACHE_NAME = 'yew-pwa-cache-v1.01.03';
 // const urlsToCache = [
-//     '/index.html',
-//     '/manifest.json',
-//     '/assets/croatian.json',
-//     '/pkg/yew_project_bg.wasm',
-//     '/pkg/yew_project.js',
-//     '/icons/icon-192x192.png',
-//     '/icons/icon-512x512.png',
-//     '/icons/icon-1024x1024.png',
-//     '/static/style.css',
+//     'index.html',
+//     'manifest.json',
+//     'assets/croatian.json',
+//     'pkg/yew_project_bg.wasm',
+//     'pkg/yew_project.js',
+//     'icons/icon-192x192.png',
+//     'icons/icon-512x512.png',
+//     'icons/icon-1024x1024.png',
+//     'static/style.css',
 // ];
 
 // self.addEventListener('install', function(event) {
@@ -49,7 +49,7 @@
 //                     .catch(error => {
 //                         console.error('Service Worker: Fetch failed; returning offline page', error);
 //                         // You can add an offline fallback here if you have a dedicated offline page
-//                         return caches.match('/index.html');  // Fallback to main page or offline page
+//                         return caches.match('index.html');  // Fallback to main page or offline page
 //                     });
 //             })
 //     );

@@ -1060,6 +1060,7 @@ dependencies = [
  "gloo-events 0.2.0",
  "gloo-net 0.2.6",
  "gloo-storage",
+ "gloo-timers",
  "indexmap 2.9.0",
  "js-sys",
  "log",
