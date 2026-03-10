@@ -70,7 +70,7 @@ body {
 
 .subtitle {
   font-size: clamp(14px, 1.6vw, 18px);
-  color: var(--muted);
+  color: var(-muted);
 }
 
 .tile-row {
@@ -237,7 +237,8 @@ body {
 
 .axis-label {
   white-space: nowrap;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.75);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(31, 27, 23, 0.5);
 }
 
 @keyframes rise {
