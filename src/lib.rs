@@ -87,18 +87,8 @@ fn delta_from_counts(r: u32, w: u32) -> u32 {
 
 fn average_delta_for_hue(stats: &Stats, center: usize) -> f64 {
     let indices = window_indices(center);
-    let mut sum = 0.0;
-    let mut count = 0.0;
-    for idx in indices {
-        sum += stats.correct_delta_sum[idx];
-        count += stats.correct[idx] as f64;
-    }
-    if count > 0.0 {
-        sum / count
-    } else {
-        let (r, w) = window_counts(stats, center);
-        delta_from_counts(r, w) as f64
-    }
+    let (r, w) = window_counts(stats, center);
+    delta_from_counts(r, w) as f64
 }
 
 fn weighted_center(stats: &Stats) -> usize {
