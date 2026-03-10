@@ -3,7 +3,7 @@ use gloo_timers::callback::Timeout;
 use js_sys::Math;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
-use web_sys::{HtmlElement, MouseEvent, TouchEvent};
+use web_sys::{Element, MouseEvent, TouchEvent};
 use yew::prelude::*;
 
 const HUE_COUNT: usize = 360;
@@ -143,7 +143,7 @@ fn generate_trial(stats: &Stats) -> Trial {
 }
 
 fn element_center_x(node: &NodeRef) -> Option<f64> {
-    node.cast::<HtmlElement>().map(|el| {
+    node.cast::<Element>().map(|el| {
         let rect = el.get_bounding_client_rect();
         rect.x() + rect.width() / 2.0
     })
@@ -360,7 +360,7 @@ fn app() -> Html {
                 onmouseup={on_mouse_up.clone()}
                 onmouseleave={on_mouse_up}
                 ontouchmove={on_touch_move}
-                ontouchend={on_touch_end}
+                ontouchend={on_touch_end.clone()}
                 ontouchcancel={on_touch_end}
             >
                 <div class="headline">
