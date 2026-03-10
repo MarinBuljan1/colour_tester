@@ -331,7 +331,7 @@ fn app() -> Html {
     let mut path = String::new();
     for (hue, delta) in map_values.iter().enumerate() {
         let normalized = ((delta - 1.0) / (SAFE_DELTA_CAP - 1.0)).clamp(0.0, 1.0);
-        let y = 100.0 - normalized * 100.0;
+        let y = normalized * 100.0;
         if hue == 0 {
             path.push_str(&format!("M {} {}", hue, y));
         } else {
@@ -394,10 +394,21 @@ fn app() -> Html {
             </section>
             <section class="map-area">
                 <div class="map-title">{ "Distinguishability by Hue" }</div>
-                <div class="map-chart">
-                    <svg viewBox="0 0 360 100" preserveAspectRatio="none">
-                        <path d={path} />
-                    </svg>
+                <div class="map-frame">
+                    <div class="axis-title">{ "Colour Vision" }</div>
+                    <div class="map-chart-wrap">
+                        <div class="map-chart">
+                            <svg viewBox="0 0 360 100" preserveAspectRatio="none">
+                                <line class="axis" x1="0" y1="0" x2="0" y2="100" />
+                                <line class="axis" x1="0" y1="100" x2="360" y2="100" />
+                                <path d={path} />
+                            </svg>
+                        </div>
+                        <div class="axis-labels">
+                            <div class="axis-label top">{ "Perfect Colour Vision" }</div>
+                            <div class="axis-label bottom">{ "Colour Blind" }</div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
