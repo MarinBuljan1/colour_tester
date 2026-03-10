@@ -148,6 +148,7 @@ body {
   gap: 10px;
   animation: rise 0.9s ease both;
   animation-delay: 0.08s;
+  overflow: hidden;
 }
 
 .map-title {
@@ -163,6 +164,7 @@ body {
   grid-template-columns: auto 1fr;
   gap: 12px;
   align-items: stretch;
+  min-height: 0;
 }
 
 .axis-title {
@@ -179,15 +181,22 @@ body {
 
 .map-chart-wrap {
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   display: flex;
   height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .map-chart {
   position: relative;
   flex: 1;
-  height: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  aspect-ratio: 2/1;
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(31, 27, 23, 0.12);
@@ -220,9 +229,9 @@ body {
 
 .axis-labels {
   position: absolute;
-  right: 10px;
+  right: 8px;
   top: 0;
-  bottom: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -231,7 +240,7 @@ body {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1.1px;
-  color: var(--muted);
+  color: #ffffff;
   padding: 4px 0;
   pointer-events: none;
 }
@@ -240,6 +249,9 @@ body {
   white-space: nowrap;
   color: #ffffff;
   text-shadow: 0 1px 3px rgba(31, 27, 23, 0.5);
+  background: rgba(31, 27, 23, 0.25);
+  padding: 2px 6px;
+  border-radius: 999px;
 }
 
 @keyframes rise {
@@ -267,18 +279,6 @@ body {
   .meta {
     flex-direction: column;
     gap: 6px;
-  }
-}
-
-@media (max-width: 520px) {
-  .tile-row {
-    gap: 12px;
-    padding: 8px 6px;
-  }
-
-  .color-tile {
-    width: min(24vw, 120px);
-    min-width: 72px;
   }
 }
 @media (max-width: 520px) {
