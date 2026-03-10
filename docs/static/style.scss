@@ -57,6 +57,7 @@ body {
   justify-content: space-between;
   padding: 28px 32px;
   animation: rise 0.9s ease both;
+  position: relative;
 }
 
 .headline {
@@ -113,13 +114,16 @@ body {
 }
 
 .feedback {
-  align-self: center;
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
   padding: 6px 14px;
   border-radius: 999px;
-  margin-top: 6px;
+  z-index: 2;
 }
 
 .feedback.correct {

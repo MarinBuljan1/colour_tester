@@ -22,10 +22,7 @@ body {
   margin: 0;
   font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at 20% 15%, rgba(255, 188, 142, 0.4), transparent 55%),
-    radial-gradient(circle at 80% 20%, rgba(104, 221, 255, 0.35), transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(210, 255, 197, 0.4), transparent 55%),
-    #f3efe7;
+  background: radial-gradient(circle at 20% 15%, rgba(255, 188, 142, 0.4), transparent 55%), radial-gradient(circle at 80% 20%, rgba(104, 221, 255, 0.35), transparent 50%), radial-gradient(circle at 70% 80%, rgba(210, 255, 197, 0.4), transparent 55%), #f3efe7;
   display: flex;
   justify-content: center;
 }
@@ -56,6 +53,7 @@ body {
   justify-content: space-between;
   padding: 28px 32px;
   animation: rise 0.9s ease both;
+  position: relative;
 }
 
 .headline {
@@ -88,8 +86,7 @@ body {
   width: min(26vw, 190px);
   aspect-ratio: 1;
   border-radius: 22px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35),
-    0 16px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 16px 28px rgba(0, 0, 0, 0.18);
 }
 
 .color-tile.center {
@@ -112,13 +109,16 @@ body {
 }
 
 .feedback {
-  align-self: center;
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
   padding: 6px 14px;
   border-radius: 999px;
-  margin-top: 6px;
+  z-index: 2;
 }
 
 .feedback.correct {
@@ -162,7 +162,7 @@ body {
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(31, 27, 23, 0.12);
-  background: linear-gradient(90deg, hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), hsl(360, 100%, 50%));
+  background: linear-gradient(90deg, hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), hsl(0, 100%, 50%));
 }
 
 .map-chart svg {
@@ -187,23 +187,21 @@ body {
     transform: translateY(0);
   }
 }
-
 @media (max-width: 720px) {
   .app {
     padding: 18px;
     grid-template-rows: auto auto;
   }
-
   .play-area {
     padding: 20px;
   }
-
   .color-tile {
     width: min(28vw, 140px);
   }
-
   .meta {
     flex-direction: column;
     gap: 6px;
   }
 }
+
+/*# sourceMappingURL=style.css.map */

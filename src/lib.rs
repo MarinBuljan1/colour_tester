@@ -239,7 +239,7 @@ fn app() -> Html {
                 drop(existing);
             }
             let feedback = feedback.clone();
-            let timeout = Timeout::new(700, move || {
+            let timeout = Timeout::new(1400, move || {
                 feedback.set(None);
             });
             *feedback_timer.borrow_mut() = Some(timeout);
