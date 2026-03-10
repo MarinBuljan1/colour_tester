@@ -1,0 +1,16 @@
+{
+  "name": "yew_project",
+  "type": "module",
+  "description": "A simple Yew-based flashcard app",
+  "version": "0.1.0",
+  "files": [
+    "yew_project_bg.wasm",
+    "yew_project.js",
+    "yew_project.d.ts"
+  ],
+  "main": "yew_project.js",
+  "types": "yew_project.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
