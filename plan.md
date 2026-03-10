@@ -28,7 +28,7 @@ Interaction
 Adaptive Difficulty (Delta)
 Delta is computed only from counts of correct (R) and wrong (W) answers in the local hue band.
 
-=1 + MAX((1 - (R+1) / MAX(1, (R+1) + (W+1))) * 128 - (R+1) + (W+1), 0)
+=1 + MAX((1 - (R+1) / MAX(1, (R+1) + (W+1))) * 64 - (R+1) + (W+1), 0)
 
 Interpretation:
 - Delta is the smaller hue offset.

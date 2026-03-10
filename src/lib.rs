@@ -9,8 +9,8 @@ use yew::prelude::*;
 const HUE_COUNT: usize = 360;
 const WINDOW_RADIUS: i32 = 10;
 const LOCAL_STORAGE_KEY: &str = "colour_tester_stats";
-const MAX_DELTA: f64 = 128.0;
-const SAFE_DELTA_CAP: f64 = 90.0; // Keep 2*delta within 180 so shortest-distance logic stays valid.
+const MAX_DELTA: f64 = 64.0;
+const SAFE_DELTA_CAP: f64 = 64.0; // Keep 2*delta within 180 so shortest-distance logic stays valid.
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Stats {
