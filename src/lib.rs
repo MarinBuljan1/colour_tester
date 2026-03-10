@@ -44,6 +44,12 @@ struct Trial {
     delta: u32,
 }
 
+#[derive(Clone)]
+struct MapInfo {
+    hue: usize,
+    delta: u32,
+}
+
 fn load_stats() -> Stats {
     LocalStorage::get(LOCAL_STORAGE_KEY).unwrap_or_default()
 }
@@ -86,7 +92,6 @@ fn delta_from_counts(r: u32, w: u32) -> u32 {
 }
 
 fn average_delta_for_hue(stats: &Stats, center: usize) -> f64 {
-    let indices = window_indices(center);
     let (r, w) = window_counts(stats, center);
     delta_from_counts(r, w) as f64
 }
@@ -139,6 +144,15 @@ fn element_center_x(node: &NodeRef) -> Option<f64> {
     })
 }
 
+fn element_rect(node: &NodeRef) -> Option<web_sys::DomRect> {
+    node.cast::<Element>().map(|el| el.get_bounding_client_rect())
+}
+
+fn hue_from_client_x(rect: &web_sys::DomRect, client_x: f64) -> usize {
+    let relative = ((client_x - rect.x()) / rect.width()).clamp(0.0, 1.0);
+    (relative * (HUE_COUNT as f64 - 1.0)).round() as usize
+}
+
 fn selection_threshold_px(center: &NodeRef, left: &NodeRef, right: &NodeRef) -> f64 {
     if let (Some(center_x), Some(left_x), Some(right_x)) = (
         element_center_x(center),
@@ -177,6 +191,8 @@ fn app() -> Html {
     let left_ref = use_node_ref();
     let center_ref = use_node_ref();
     let right_ref = use_node_ref();
+    let map_ref = use_node_ref();
+    let map_info = use_state(|| None::<MapInfo>);
 
     let on_mouse_down = {
         let dragging = dragging.clone();
@@ -343,6 +359,61 @@ fn app() -> Html {
     let left_style = format!("background: hsl({}, 100%, 50%);", current_trial.left_hue);
     let right_style = format!("background: hsl({}, 100%, 50%);", current_trial.right_hue);
 
+    let on_map_move = {
+        let map_ref = map_ref.clone();
+        let map_info = map_info.clone();
+        let map_values = map_values.clone();
+        Callback::from(move |client_x: f64| {
+            if let Some(rect) = element_rect(&map_ref) {
+                let hue = hue_from_client_x(&rect, client_x);
+                let delta = map_values.get(hue).copied().unwrap_or(0.0).round() as u32;
+                map_info.set(Some(MapInfo { hue, delta }));
+            }
+        })
+    };
+
+    let on_map_mouse_move = {
+        let on_map_move = on_map_move.clone();
+        Callback::from(move |event: MouseEvent| {
+            on_map_move.emit(event.client_x() as f64);
+        })
+    };
+
+    let on_map_touch_move = {
+        let on_map_move = on_map_move.clone();
+        Callback::from(move |event: TouchEvent| {
+            if let Some(x) = touch_x(&event) {
+                event.prevent_default();
+                on_map_move.emit(x);
+            }
+        })
+    };
+
+    let on_map_mouse_leave = {
+        let map_info = map_info.clone();
+        Callback::from(move |_event: MouseEvent| {
+            map_info.set(None);
+        })
+    };
+
+    let on_map_touch_end = {
+        let map_info = map_info.clone();
+        Callback::from(move |_event: TouchEvent| {
+            map_info.set(None);
+        })
+    };
+
+    let map_readout_content = (*map_info).as_ref().map(|info| {
+        let swatch_style = format!("background: hsl({}, 100%, 50%);", info.hue);
+        html! {
+            <>
+                <span class="map-swatch" style={swatch_style} />
+                <span>{ format!("Hue {}°", info.hue) }</span>
+                <span>{ format!("Distinguishable change in Hue: {}", info.delta) }</span>
+            </>
+        }
+    });
+
     html! {
         <div class="app">
             <section class="play-area"
@@ -354,7 +425,7 @@ fn app() -> Html {
                 ontouchcancel={on_touch_end}
             >
                 <div class="headline">
-                    <div class="title">{ "Colour Closer" }</div>
+                    <div class="title">{ "Colour Tester" }</div>
                     <div class="subtitle">{ "Drag the center tile toward the closest hue." }</div>
                 </div>
                 <div class="tile-row">
@@ -378,8 +449,7 @@ fn app() -> Html {
                     }
                 }
                 <div class="meta">
-                    <span>{ format!("Delta {}", current_trial.delta) }</span>
-                    <span>{ "Hue distance" }</span>
+                    <span>{ format!("Hue distance: {}", current_trial.delta) }</span>
                 </div>
             </section>
             <section class="map-area">
@@ -387,7 +457,17 @@ fn app() -> Html {
                 <div class="map-frame">
                     <div class="axis-title">{ "Colour Vision" }</div>
                     <div class="map-chart-wrap">
-                        <div class="map-chart">
+                        <div
+                            class="map-chart"
+                            ref={map_ref}
+                            onmousemove={on_map_mouse_move.clone()}
+                            onmousedown={on_map_mouse_move}
+                            onmouseleave={on_map_mouse_leave}
+                            ontouchstart={on_map_touch_move.clone()}
+                            ontouchmove={on_map_touch_move}
+                            ontouchend={on_map_touch_end.clone()}
+                            ontouchcancel={on_map_touch_end}
+                        >
                             <svg viewBox="0 0 360 100" preserveAspectRatio="none">
                                 <line class="axis" x1="0" y1="0" x2="0" y2="100" />
                                 <line class="axis" x1="0" y1="100" x2="360" y2="100" />
@@ -398,6 +478,11 @@ fn app() -> Html {
                             <div class="axis-label top">{ "Perfect Colour Vision" }</div>
                             <div class="axis-label bottom">{ "Colour Blind" }</div>
                         </div>
+                    </div>
+                    <div class="map-empty">
+                    </div>
+                    <div class={classes!("map-readout", map_readout_content.is_none().then_some("empty"))}>
+                        { map_readout_content.unwrap_or_else(|| html! { <span>{ " " }</span> }) }
                     </div>
                 </div>
             </section>
