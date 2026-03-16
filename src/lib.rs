@@ -121,9 +121,10 @@ fn generate_trial(stats: &Stats) -> Trial {
     let (r, w) = window_counts(stats, center_hue);
     let delta = delta_from_counts(r, w);
     let close_left = Math::random() < 0.5;
-    let close_offset = delta as i32;
-    let far_offset = (delta * 2) as i32;
-    let left_offset = if close_left { -close_offset } else { -far_offset };
+    let direction = if Math::random() < 0.5 { -1 } else { 1 };
+    let close_offset = direction * delta as i32;
+    let far_offset = direction * (delta * 2) as i32;
+    let left_offset = if close_left { close_offset } else { far_offset };
     let right_offset = if close_left { far_offset } else { close_offset };
     let left_hue = wrap_hue(center_hue as i32 + left_offset);
     let right_hue = wrap_hue(center_hue as i32 + right_offset);
